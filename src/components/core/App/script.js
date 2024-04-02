@@ -11,7 +11,6 @@ import FileLoader from 'paraview-glance/src/components/core/FileLoader';
 import Landing from 'paraview-glance/src/components/core/Landing';
 import LayoutView from 'paraview-glance/src/components/core/LayoutView';
 import Screenshots from 'paraview-glance/src/components/core/Screenshots';
-import StateFileGenerator from 'paraview-glance/src/components/core/StateFileGenerator';
 import CollapsibleToolbar from 'paraview-glance/src/components/widgets/CollapsibleToolbar';
 import CollapsibleToolbarItem from 'paraview-glance/src/components/widgets/CollapsibleToolbar/Item';
 import DragAndDrop from 'paraview-glance/src/components/widgets/DragAndDrop';
@@ -37,7 +36,6 @@ export default {
     Landing,
     LayoutView,
     Screenshots,
-    StateFileGenerator,
     SvgIcon,
     VBottomSheet,
     VDialog,
