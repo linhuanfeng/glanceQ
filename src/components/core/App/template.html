@@ -40,10 +40,6 @@
               <v-icon left>mdi-folder</v-icon>
               <span v-show="state !== 'dense'">Open</span>
             </collapsible-toolbar-item>
-            <collapsible-toolbar-item v-show="!landingVisible" v-on:click="saveState()" :state="state">
-              <v-icon left>mdi-cloud-download</v-icon>
-              <span v-show="state !== 'dense'">Save state</span>
-            </collapsible-toolbar-item>
             <collapsible-toolbar-item v-show="!landingVisible" v-on:click="screenshotsDrawer = true" :state="state">
               <v-icon left>mdi-image-multiple</v-icon>
               <span v-show="state !== 'dense'">

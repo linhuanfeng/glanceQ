@@ -1,4 +1,3 @@
-import JSZip from 'jszip';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -20,8 +19,6 @@ import {
   createRepresentationInAllViews,
   wrapMutationAsAction,
 } from 'paraview-glance/src/utils';
-
-const STATE_VERSION = 2;
 
 // http://jsperf.com/typeofvar
 function typeOf(o) {
@@ -82,7 +79,6 @@ function createStore(injected) {
     state: {
       proxyManager, // TODO remove
       route: 'app', // valid values: landing, app
-      savingStateName: null,
       loadingState: false,
       screenshotDialog: false,
       pendingScreenshot: null,
@@ -116,9 +112,6 @@ function createStore(injected) {
       showApp(state) {
         state.route = 'app';
       },
-      savingState(state, name = null) {
-        state.savingStateName = name;
-      },
       loadingState(state, flag) {
         state.loadingState = flag;
       },
@@ -151,78 +144,6 @@ function createStore(injected) {
       closeScreenshotDialog: wrapMutationAsAction('closeScreenshotDialog'),
       collapseDatasetPanels: wrapMutationAsAction('collapseDatasetPanels'),
       suppressBrowserWarning: wrapMutationAsAction('suppressBrowserWarning'),
-      saveState({ commit, state }, fileNameToUse) {
-        const t = new Date();
-        const fileName =
-          fileNameToUse ||
-          `${t.getFullYear()}${
-            t.getMonth() + 1
-          }${t.getDate()}_${t.getHours()}-${t.getMinutes()}-${t.getSeconds()}.glance`;
-
-        commit('savingState', fileName);
-
-        const activeSourceId = proxyManager.getActiveSource()
-          ? proxyManager.getActiveSource().getProxyId()
-          : -1;
-
-        const userData = {
-          version: STATE_VERSION,
-          activeSourceId,
-          store: {
-            route: state.route,
-            views: state.views,
-            widgets: state.widgets,
-          },
-        };
-
-        const options = {
-          recycleViews: true,
-          datasetHandler(dataset, source) {
-            const sourceMeta = source.get('name', 'url', 'remoteMetaData');
-            const datasetMeta = dataset.get('name', 'url', 'remoteMetaData');
-            const metadata = sourceMeta.url ? sourceMeta : datasetMeta;
-            if (source.getKey('girderProvenance')) {
-              return {
-                serializedType: 'girder',
-                provenance: source.getKey('girderProvenance'),
-                item: source.getKey('girderItem'),
-                meta: source.getKey('meta'),
-              };
-            }
-            if (metadata.name && metadata.url) {
-              return metadata;
-            }
-            // Not a remote dataset so use basic dataset serialization
-            return dataset.getState();
-          },
-        };
-
-        const zip = new JSZip();
-        proxyManager.saveState(options, userData).then((stateObject) => {
-          zip.file('state.json', JSON.stringify(stateObject));
-          zip
-            .generateAsync({
-              type: 'blob',
-              compression: 'DEFLATE',
-              compressionOptions: {
-                level: 6,
-              },
-            })
-            .then((blob) => {
-              const url = URL.createObjectURL(blob);
-              const anchor = document.createElement('a');
-              anchor.setAttribute('href', url);
-              anchor.setAttribute('download', fileName);
-
-              document.body.appendChild(anchor);
-              anchor.click();
-              document.body.removeChild(anchor);
-
-              setTimeout(() => URL.revokeObjectURL(url), 60000);
-            })
-            .then(() => commit('savingState', null));
-        });
-      },
       restoreAppState({ commit, dispatch, state }, appState) {
         commit('loadingState', true);
 

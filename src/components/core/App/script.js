@@ -146,7 +146,6 @@ export default {
       },
     }),
     ...mapActions({
-      saveState: 'saveState',
       initViews: 'views/initViews',
     }),
     ...mapActions('files', [
