@@ -1,21 +1,21 @@
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
+import macro from '@kitware/vtk.js/macro';
 import Mousetrap from 'mousetrap';
 import { VBottomSheet, VDialog } from 'vuetify/lib';
-import macro from '@kitware/vtk.js/macro';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 
 import AboutBox from 'paraview-glance/src/components/core/AboutBox';
 import BrowserIssues from 'paraview-glance/src/components/core/BrowserIssues';
 import ControlsDrawer from 'paraview-glance/src/components/core/ControlsDrawer';
-import DragAndDrop from 'paraview-glance/src/components/widgets/DragAndDrop';
 import ErrorBox from 'paraview-glance/src/components/core/ErrorBox';
 import FileLoader from 'paraview-glance/src/components/core/FileLoader';
 import Landing from 'paraview-glance/src/components/core/Landing';
 import LayoutView from 'paraview-glance/src/components/core/LayoutView';
 import Screenshots from 'paraview-glance/src/components/core/Screenshots';
 import StateFileGenerator from 'paraview-glance/src/components/core/StateFileGenerator';
-import SvgIcon from 'paraview-glance/src/components/widgets/SvgIcon';
 import CollapsibleToolbar from 'paraview-glance/src/components/widgets/CollapsibleToolbar';
 import CollapsibleToolbarItem from 'paraview-glance/src/components/widgets/CollapsibleToolbar/Item';
+import DragAndDrop from 'paraview-glance/src/components/widgets/DragAndDrop';
+import SvgIcon from 'paraview-glance/src/components/widgets/SvgIcon';
 
 import shortcuts from 'paraview-glance/src/shortcuts';
 
@@ -135,7 +135,9 @@ export default {
     ...mapMutations({
       showApp: 'showApp',
       showLanding: 'showLanding',
+      // 导航栏app和landing的切换
       toggleLanding() {
+        console.log('toggleLanding');
         if (this.landingVisible) {
           this.showApp();
         } else {

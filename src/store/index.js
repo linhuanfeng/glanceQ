@@ -2,23 +2,23 @@ import JSZip from 'jszip';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import vtk from '@kitware/vtk.js/vtk';
 import vtkProxyManager from '@kitware/vtk.js/Proxy/Core/ProxyManager';
+import vtk from '@kitware/vtk.js/vtk';
 
 import { ProxyManagerVuexPlugin } from 'paraview-glance/src/plugins/proxyManagerPlugins';
 
 import viewHelper from 'paraview-glance/src/components/core/VtkView/helper';
+import Config from 'paraview-glance/src/config';
 import ReaderFactory from 'paraview-glance/src/io/ReaderFactory';
 import postProcessDataset from 'paraview-glance/src/io/postProcessing';
-import Config from 'paraview-glance/src/config';
+import animations from 'paraview-glance/src/store/animations';
 import files, { getExtension } from 'paraview-glance/src/store/fileLoader';
 import views from 'paraview-glance/src/store/views';
 import widgets from 'paraview-glance/src/store/widgets';
-import animations from 'paraview-glance/src/store/animations';
 
 import {
-  wrapMutationAsAction,
   createRepresentationInAllViews,
+  wrapMutationAsAction,
 } from 'paraview-glance/src/utils';
 
 const STATE_VERSION = 2;
@@ -81,7 +81,7 @@ function createStore(injected) {
     plugins: [ProxyManagerVuexPlugin(proxyManager)],
     state: {
       proxyManager, // TODO remove
-      route: 'landing', // valid values: landing, app
+      route: 'app', // valid values: landing, app
       savingStateName: null,
       loadingState: false,
       screenshotDialog: false,
